@@ -1,8 +1,11 @@
+import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 import { Event, SimplePool, UnsignedEvent, getEventHash, getSignature } from 'nostr-tools';
 import 'websocket-polyfill';
 
 export const dynamic = 'force-dynamic';
+
+const CRON_JOB_KEY = process.env.CRON_JOB_KEY || '';
 
 const NOSTR_PUBLIC_KEY = process.env.NOSTR_PUBLIC_KEY || '';
 const NOSTR_PRIVATE_KEY = process.env.NOSTR_PRIVATE_KEY || '';
@@ -38,7 +41,12 @@ const publishEvent = (content: string, tags: string[][]) =>
     });
   });
 
-export async function GET() {
+export async function GET(request: NextApiRequest, response: NextApiResponse) {
+  if (request.query.key !== CRON_JOB_KEY) {
+    response.status(404).end();
+    return;
+  }
+
   await publishEvent(
     'Welcome to the Most Exciting Nostr Lottery: LUCKSTR!\n\nZapping this note will make you join the ⚡ PRIZE POOL!\n\nThe more sats you zap to this note, the higher your chances of winning!\n\nThis is a fully automated and transparent daily lottery!\nCheck out older notes for past lottery rounds and winners!\n\nImportant rules and details:\nEvery single transaction, in and out, can be tracked by its zap event of kind 9735.\nThe winner will be chosen at random using an open-source and fair algorithm.\nThe winner will be announced the following day.\n95 percent of total collected sats will be automatically sent back to the winner`s Lightning Address (lud16) available in their profile metadata (make sure you have the right setup before participating)\nAnd 5 percent of total collected sats will be kept as a fee and will be dedicated to the development of Nostr apps and tools.\nBe careful not to zap older notes, as they will not be considered for this lottery.\n\nGood luck and have fun!',
     [['t', 'lottery']]

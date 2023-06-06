@@ -1,10 +1,13 @@
 import { webln } from 'alby-js-sdk';
 import { LightningAddress } from 'alby-tools';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 import { Event, SimplePool, UnsignedEvent, getEventHash, getSignature, nip19 } from 'nostr-tools';
 import 'websocket-polyfill';
 
 export const dynamic = 'force-dynamic';
+
+const CRON_JOB_KEY = process.env.CRON_JOB_KEY || '';
 
 const ALBY_WALLET_CONNECT_URL = process.env.ALBY_WALLET_CONNECT_URL || '';
 
@@ -258,7 +261,12 @@ const sendPrizeToWinner = async (winner: Participant, prizeAmount: number) => {
   return { lud16, invoice, zapResponse };
 };
 
-export async function GET() {
+export async function GET(request: NextApiRequest, response: NextApiResponse) {
+  if (request.query.key !== CRON_JOB_KEY) {
+    response.status(404).end();
+    return;
+  }
+
   const latestLotteryNoteId = await getLatestLotteryNoteId();
   if (!latestLotteryNoteId) {
     console.error('No lottery note');
