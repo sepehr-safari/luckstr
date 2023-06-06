@@ -1,4 +1,4 @@
-import { writeFileSync } from 'fs';
+const fs = require('fs');
 
 function createVercelJSON() {
   const content = {
@@ -16,7 +16,7 @@ function createVercelJSON() {
 
   const filePath = 'vercel.json';
 
-  writeFileSync(filePath, JSON.stringify(content, null, 2));
+  fs.writeFileSync(filePath, JSON.stringify(content, null, 2));
 }
 
 createVercelJSON();
