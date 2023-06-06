@@ -1,6 +1,6 @@
 import { webln } from 'alby-js-sdk';
 import { LightningAddress } from 'alby-tools';
-import { NextApiRequest, NextApiResponse } from 'next';
+import 'cross-fetch/polyfill';
 import { NextResponse } from 'next/server';
 import { Event, SimplePool, UnsignedEvent, getEventHash, getSignature, nip19 } from 'nostr-tools';
 import 'websocket-polyfill';
@@ -261,10 +261,11 @@ const sendPrizeToWinner = async (winner: Participant, prizeAmount: number) => {
   return { lud16, invoice, zapResponse };
 };
 
-export async function GET(request: NextApiRequest, response: NextApiResponse) {
-  if (request.query.key !== CRON_JOB_KEY) {
-    response.status(404).end();
-    return;
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const key = searchParams.get('key');
+  if (key !== CRON_JOB_KEY) {
+    return NextResponse.json({ success: false });
   }
 
   const latestLotteryNoteId = await getLatestLotteryNoteId();
