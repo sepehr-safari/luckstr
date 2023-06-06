@@ -1,10 +1,9 @@
 {
   "name": "luckstr",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "prebuild": "node vercel.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -16,6 +15,7 @@
     "alby-js-sdk": "^1.7.1",
     "alby-tools": "^2.3.0",
     "autoprefixer": "10.4.14",
+    "encoding": "^0.1.13",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
     "next": "13.4.4",

@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/v1/publish?key=98984949757516167218",
+      "schedule": "0 19 * * *"
+    },
+    {
+      "path": "/api/v1/draw?key=98984949757516167218",
+      "schedule": "0 18 * * *"
+    }
+  ]
+}
