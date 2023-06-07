@@ -265,6 +265,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const key = searchParams.get('key');
   if (key !== CRON_JOB_KEY) {
+    console.error('Wrong key');
     return NextResponse.json({ success: false });
   }
 

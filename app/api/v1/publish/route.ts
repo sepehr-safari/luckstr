@@ -1,5 +1,4 @@
 import 'cross-fetch/polyfill';
-import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 import { Event, SimplePool, UnsignedEvent, getEventHash, getSignature } from 'nostr-tools';
 import 'websocket-polyfill';
@@ -46,6 +45,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const key = searchParams.get('key');
   if (key !== CRON_JOB_KEY) {
+    console.error('Wrong key');
     return NextResponse.json({ success: false });
   }
 
